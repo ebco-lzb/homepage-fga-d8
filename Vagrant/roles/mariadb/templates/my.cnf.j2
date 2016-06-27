@@ -1,0 +1,42 @@
+[client]
+port = 3306
+socket = /var/lib/mysql/mysql.sock
+
+[isamchk]
+key_buffer_size = {{ key_buffer_size }}
+
+[mysqld]
+datadir=/var/lib/mysql
+socket=/var/lib/mysql/mysql.sock
+# Disabling symbolic-links is recommended to prevent assorted security risks
+symbolic-links=0
+# Settings user and group are ignored when systemd is used.
+# If you need to run mysqld under a different user or group,
+# customize your systemd unit file for mariadb according to the
+# instructions in http://fedoraproject.org/wiki/Systemd
+expire_logs_days = {{ expire_logs_days }}
+key_buffer_size = {{ key_buffer_size }}
+max_allowed_packet = {{ max_allowed_packet }}
+max_binlog_size = {{ max_binlog_size }}
+max_connections = {{ max_connections }}
+myisam_recover = BACKUP
+query_cache_limit = {{ query_cache_limit }}
+query_cache_size = {{ query_cache_size }}
+thread_cache_size = {{ thread_cache_size }}
+thread_stack = {{ thread_stack }}
+tmpdir = /tmp
+user = mysql
+
+[mysqld_safe]
+log-error=/var/log/mariadb/mariadb.log
+pid-file=/var/run/mariadb/mariadb.pid
+
+[mysqldump]
+max_allowed_packet = {{ max_allowed_packet }}
+quick
+quote-names
+
+#
+# include all files from the config directory
+#
+!includedir /etc/my.cnf.d

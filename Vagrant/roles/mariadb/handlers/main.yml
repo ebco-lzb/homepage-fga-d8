@@ -1,0 +1,9 @@
+---
+  - name: Start MariaDB
+    service: name=mariadb state=started
+
+  - name: Stop MariaDB
+    service: name=mariadb state=stopped
+
+  - name: Restart MariaDB
+    service: name=mariadb state=restarted

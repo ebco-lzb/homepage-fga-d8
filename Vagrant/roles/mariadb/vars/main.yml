@@ -1,0 +1,13 @@
+dbuser: vagrant
+dbpass: vagrant
+expire_logs_days: 10
+key_buffer_size: 16M
+max_allowed_packet: 16M
+max_binlog_size: 100M
+max_connections: 151
+query_cache_limit: 1M
+query_cache_size: 16M
+thread_cache_size: 8
+thread_stack: 256K
+vagrant_db_user: vagrant
+vagrant_db_pass: vagrant

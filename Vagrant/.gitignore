@@ -1,0 +1,5 @@
+# Ignore paths that contain user-generated content.
+db/*.bz2
+.vagrant
+public_html
+public_html/

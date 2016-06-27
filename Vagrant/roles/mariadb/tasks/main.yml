@@ -1,0 +1,44 @@
+---
+  - name: MariaDB Install
+    yum: name={{ item }}
+    with_items:
+     - mariadb-server
+    register: mariadbinstalled
+
+  - name: MariaDB my.cnf
+    when: mariadbinstalled|success
+    action: template src=my.cnf.j2 dest=/etc/my.cnf
+    register: my_cnf_copied
+
+  - name: Starting MariaDB
+    when: my_cnf_copied|success
+    service: name=mariadb state=started
+    register: mariadbstarted
+
+  - name: Enabled MariaDB Service
+    when: mariadbinstalled|success
+    service: name=mariadb enabled=true
+
+  - name: Ensure DB user exists
+    when: mariadbstarted|success
+    mysql_user: name={{ vagrant_db_user }}  password={{ vagrant_db_pass }} priv='vagrant.*:ALL' state=present
+    register: mariadbusers
+
+  - name: check if DB exists
+    shell: /usr/bin/mysql -e "SHOW DATABASES;"
+    register: dbstatus
+    when: mariadbstarted|success
+
+  - name: Ensure DB exists
+    when: mariadbinstalled|success
+    mysql_db: name=vagrant state=present
+    register: vagrantdbcreated
+
+#  - name: Transfer DB
+#    when: vagrantdbcreated|success
+#    copy: src=homepage_sql.bz2 dest=/tmp/
+#    register: vagrantdbcopied
+
+  - name: Import ConnectDB
+    when: dbstatus.stdout.find('vagrant') == -1
+    mysql_db: name=vagrant state=import target=/tmp/db/homepage_sql.bz2
